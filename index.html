@@ -4,9 +4,70 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>JoinChat</title>
+        <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.theme.min.css">
+        <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
     <body>
-        <h1>Welcome to JoinChat!!!</h1>
-        <p>Get prepared...</p>
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <span class="brand-title">
+                            JoinChat
+                        </span>
+                        <span class="helper-brand">JC</span>
+                        <a href="#" class="btn btn-default" id="menu-toggle">
+                            <span class="icon glyphicon glyphicon-menu-hamburger"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="icon glyphicon glyphicon-plus btn btn-primary"></span><span>Nueva conversación</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="icon glyphicon glyphicon-comment btn btn-primary"></span><span>Mis conversaciones</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="icon glyphicon glyphicon-wrench btn btn-primary"></span><span>Configuración</span></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-1">
+                            
+                        </div>
+                        <div class="col-md-11">
+                            <h1>Welcome to JoinChat!!!</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>Get prepared...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <script type="text/javascript" src="/public/js/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+        <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        </script>
     </body>
 </html>
