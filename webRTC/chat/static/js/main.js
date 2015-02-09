@@ -1,7 +1,7 @@
 var ws = new WebSocket(location.href.replace('http', 'ws').replace('room', 'ws'));
-
+var configuration = {iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
 var initiator;
-var pc;
+var pc = new webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
 
 function initiatorCtrl(event) {
     console.log(event.data);
@@ -31,8 +31,8 @@ function init() {
 
 
 function connect(stream) {
-    pc = new RTCPeerConnection(null);
-
+    // pc = new RTCPeerConnection();
+    // pc = webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
     if (stream) {
         pc.addStream(stream);
         $('#local').attachStream(stream);
