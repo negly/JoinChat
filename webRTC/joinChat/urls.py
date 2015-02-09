@@ -5,6 +5,7 @@ urlpatterns = patterns('',
     # Examples:
 
     url(r'^video/', include('video.urls')),
+    url(r'^chat/', include('chat.urls')),
     # url(r'^$', 'joinChat.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 

@@ -26,6 +26,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#Templates
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, '')]
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'video',
+    'chat',
 )
 
 MIDDLEWARE_CLASSES = (
