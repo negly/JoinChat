@@ -79,5 +79,16 @@
 </ul>
 <h4>Crear un repositorio con Github y Sourcetree:</h4>
 <ul>
-	<li>Clic en Clone/new:</li>
+	<li>Clic en Clone/new: </li>
+	<img src="./imagenesDocumentacion/newGIT.jpg">
+	<li>Esto da la posibilidad de clonar, agregar y crear un nuevo repositorio.</li>
+	<li>
+		Para poder clonar un repositorio desde Github necesitamos copiar la url del repositorio. Es recomendable 			hacer fork del proyecto antes, lo que me permite trabajar sobre una copia del proyecto y no sobre el 				original 
+	</li>
+	<img src="./imagenesDocumentacion/forkGIT.jpg">
+	<li>
+		Ahora se copia esta URL en la ventana del Clone/new en el Sourcetree: 
+	</li>
+	<img src="./imagenesDocumentacion/cloneGIT.jpg">
+	<li>Finalmente se hace clic en Clone y el repositorio ya queda listo para trabajar.</li>
 </ul>
