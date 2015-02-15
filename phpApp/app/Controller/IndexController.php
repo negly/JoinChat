@@ -45,7 +45,7 @@ class IndexController extends AppController {
     }
 
     public function logout() {
-        $this->Session->setFlash('Haz finalizado tu sesión con éxito!');
+        $this->Session->setFlash('Has finalizado tu sesión con éxito!');
         return $this->redirect($this->Auth->logout());
     }
 
