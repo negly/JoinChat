@@ -32,12 +32,21 @@ class IndexController extends AppController {
      *              CONTROLLER METHODS (ACTIONS)
      *********************************************************************/
 
+    public function isAuthorized($usuario) {
+        return true;
+    }
+
     public function index() {
 
     }
 
     public function chats() {
         
+    }
+
+    public function logout() {
+        $this->Session->setFlash('Haz finalizado tu sesión con éxito!');
+        return $this->redirect($this->Auth->logout());
     }
 
 }

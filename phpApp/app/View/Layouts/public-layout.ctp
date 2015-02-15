@@ -17,7 +17,29 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="centering col-xs-4">
-                    <?php echo $this->fetch('content'); ?>
+                    <?php 
+                        $flashMsg = $this->Session->flash();
+                        $authMsg = $this->Session->flash('auth');
+
+                        if ($flashMsg) :
+                    ?>
+                    <div class="alert alert-dismissible alert-info">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <?php echo $flashMsg; ?>
+                    </div>
+                    <?php 
+                        endif;
+
+                        if ($authMsg) :
+                    ?>
+                    <div class="alert alert-dismissible alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <?php echo $authMsg; ?>
+                    </div>
+                    <?php
+                        endif;
+                        echo $this->fetch('content');
+                    ?>
                 </div>
             </div>
         </div>

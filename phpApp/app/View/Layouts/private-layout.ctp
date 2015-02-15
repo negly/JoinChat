@@ -68,13 +68,42 @@
                             <li>
                                 {$links['settings']['html']}
                             </li>
+                            <li>
+                                {$this->Html->link(
+                                    $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-off btn btn-primary')) . $this->Html->tag('span', 'Cerrar sesión'),
+                                    array('controller' => 'Index', 'action' => 'logout'),
+                                    array('escape' => false)
+                                )}
+                            </li>
                         </ul>
 NAV;
                 ?>
             </div>
 
             <div id="page-content-wrapper">
-                <?php echo $this->fetch('content'); ?>
+                <?php 
+                    $flashMsg = $this->Session->flash();
+                    $authMsg = $this->Session->flash('auth');
+
+                    if ($flashMsg) :
+                ?>
+                <div class="alert alert-dismissible alert-info">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <?php echo $flashMsg; ?>
+                </div>
+                <?php 
+                    endif;
+
+                    if ($authMsg) :
+                ?>
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <?php echo $authMsg; ?>
+                </div>
+                <?php
+                    endif;
+                    echo $this->fetch('content');
+                ?>
             </div>
         </div>
 
