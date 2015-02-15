@@ -31,5 +31,30 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = array('DebugKit.Toolbar');
+    public $components = array(
+        'DebugKit.Toolbar',
+        'Session',
+        'Auth' => array(
+            'loginAction' => array(
+                'controller' => 'public',
+                'action' => 'login'
+            ),
+            'loginRedirect' => array(
+                'controller' => 'Index',
+                'action' => 'index'
+            ),
+            'logoutRedirect' => array(
+                'controller' => 'public',
+                'action' => 'login'
+            ),
+            'authorize' => array('Controller'),
+            'authenticate' => array('Form'),
+            'authError' => 'No puede acceder a esta página o realizar esa acción debido a falta de permisos. Debe hablar con un Administrador para realizar esta operación.',
+            'sessionKey' => false
+        ),
+    );
+
+    public function isAuthorized($usuario) {
+        return true;
+    }
 }

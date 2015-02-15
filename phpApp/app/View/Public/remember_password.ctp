@@ -7,18 +7,16 @@
         <h3 class="panel-title">JoinChat - <?php echo $title; ?></h3>
     </div>
     <div class="panel-body">
-        <form>
-            <div class="form-group">
-                <label for="email">Correo</label>
-                <input type="text" class="form-control" id="email" name="email" placeholder="Ej: joinner@gmail.com">
-            </div>
-            <button type="submit" class="btn btn-primary pull-right">Enviar</button>
-            <?php
-                echo $this->Html->link(
-                    '¿Ya estás registrado?',
-                    array('controller' => 'public', 'action' => 'login'),
-                    array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
-                ); ?>
-        </form>
+        <?php
+            echo $this->Form->create('User');
+            echo $this->Form->input('email', array('label' => 'Correo', 'class' => 'form-control', 'placeholder' => 'Ej: joinner@gmail.com', 'div' => array('class' => 'form-group')));
+            echo $this->Form->submit('Enviar', array('class' => 'btn btn-primary pull-right'));
+            echo $this->Html->link(
+                '¿Ya estás registrado?',
+                array('controller' => 'public', 'action' => 'login'),
+                array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
+            );
+            echo $this->Form->end();
+        ?>
     </div>
 </div>

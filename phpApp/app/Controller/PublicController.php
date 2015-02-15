@@ -17,6 +17,10 @@ class PublicController extends AppController {
 
     public function beforeFilter() {
         $this->layout = 'public-layout';
+        $this->Auth->allow();
+        if ($this->Auth->loggedIn()) {
+            $this->redirect($this->Auth->loginRedirect);
+        }
     }
 
     // public function afterFilter() {
@@ -30,9 +34,22 @@ class PublicController extends AppController {
     /*********************************************************************
      *              CONTROLLER METHODS (ACTIONS)
      *********************************************************************/
+    public function index() {
+        return $this->redirect(array('action' => 'login'));
+    }
+
 
     public function login() {
+        if ($this->request->is('post')) {
+            if ($this->Auth->login($this->request->data['User'])) {
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar');
+        }
+    }
 
+    public function register() {
+        
     }
 
     public function rememberPassword() {
