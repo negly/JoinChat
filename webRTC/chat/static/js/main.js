@@ -1,5 +1,6 @@
 var ws = new WebSocket(location.href.replace('http', 'ws').replace('room', 'ws'));
-var configuration = {iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
+// var configuration = {iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
+var configuration = {iceServers: [{ url: 'stun:negly14.koding.io:8080' }]};
 var initiator;
 var pc = new webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
 
