@@ -109,20 +109,20 @@
 </p>
 
 <i> kpm install tomcat </i>
-<img src="./ImagenesDocumentacion/tomkatInstall.jpg">
+<img src="./imagenesDocumentacion/tomkatInstall.jpg">
 
 <p>luego se descarga el paquete,</p>
 <i>wget mirrors.gigenet.com/apache/tomcat/tomcat-7/v7.0.57/bin/apache-tomcat-7.0.57.tar.gz</i>
 
-<img src="./ImagenesDocumentacion/getmirrors.jpg">
+<img src="./imagenesDocumentacion/getmirrors.jpg">
 
 <p>Luego se descomprime el paquete descargado,</p>
 <i>tar -xvzf apache-tomcat-7*</i>
-<img src="./ImagenesDocumentacion/descomprimir.jpg">
+<img src="./imagenesDocumentacion/descomprimir.jpg">
 
 <p>Para facilidad de acceso se renombra el directorio,</p>
 <i>mv apache-tomcat-7.0.57 tomcat</i>
-<img src="./ImagenesDocumentacion/rename.jpg">
+<img src="./imagenesDocumentacion/rename.jpg">
 
 <p>
 	Ahora se necesita crear un usuario y contraseña, para lo cual se añade esta línea debajo de </tomcat-users>  en el 		archivo tomcat-users.xml que se encuentra en la carpeta config:
@@ -132,9 +132,9 @@
 <p>
 	Finalmente para evitar conflictos con el puerto debemos cambiar el puerto que usará tomcat, y esto se modifica en el 	archivo server.xml:
 </p>
-<img src="./ImagenesDocumentacion/puerto.jpg">
+<img src="./imagenesDocumentacion/puerto.jpg">
 
 <p>y ahora ya podemos iniciar el tomcat en el servidor con el siguiente comando:</p>
 <i>bash tomcat/bin/startup.sh</i>
 
-<img src="./ImagenesDocumentacion/iniciarTomcat.jpg">
+<img src="./imagenesDocumentacion/iniciarTomcat.jpg">
