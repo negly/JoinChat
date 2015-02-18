@@ -1,13 +1,13 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class PublicController extends AppController {
+class AccountController extends AppController {
 
     /*********************************************************************
      *              CONTROLLER DATA MEMBERS
      *********************************************************************/
 
-    public $name = "Public";    //name of the controller. Usually this is just the plural form of the primary model the controller uses
+    public $name = "Account";    //name of the controller. Usually this is just the plural form of the primary model the controller uses
     // public $uses = array('MiModelo', "Modelo2");        //Allows a controller to access additional models. name of the current controller’s model must also be included if uses is present
     // public $components = array("Component1", "Component2");     //make available packages of logic that are shared between controllers
 
@@ -16,10 +16,15 @@ class PublicController extends AppController {
      *********************************************************************/
 
     public function beforeFilter() {
-        $this->layout = 'public-layout';
-        $this->Auth->allow();
+        parent::beforeFilter();
+        $publicActions = array('index', 'login', 'register', 'rememberPassword');
+        $this->Auth->allow($publicActions);
         if ($this->Auth->loggedIn()) {
-            $this->redirect($this->Auth->loginRedirect);
+            if (in_array(strtolower($this->request->action), $publicActions)) {
+                $this->redirect($this->Auth->loginRedirect);
+            }
+        } else {
+            $this->layout = 'public-layout';
         }
     }
 
@@ -54,6 +59,18 @@ class PublicController extends AppController {
 
     public function rememberPassword() {
         
+    }
+
+    public function settings() {
+
+    }
+
+    public function edit() {
+        
+    }
+
+    public function changePassword() {
+
     }
 
 }

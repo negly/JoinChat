@@ -13,7 +13,7 @@
             echo $this->Form->submit('Enviar', array('class' => 'btn btn-primary pull-right'));
             echo $this->Html->link(
                 '¿Ya estás registrado?',
-                array('controller' => 'public', 'action' => 'login'),
+                array('action' => 'login'),
                 array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
             );
             echo $this->Form->end();

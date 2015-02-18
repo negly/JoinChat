@@ -16,8 +16,7 @@ class IndexController extends AppController {
      *********************************************************************/
 
     public function beforeFilter() {
-        $this->layout = 'private-layout';
-        $this->set('activeOption', $this->request->action);
+        parent::beforeFilter();
     }
 
     // public function afterFilter() {

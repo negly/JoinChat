@@ -36,7 +36,7 @@ class AppController extends Controller {
         'Session',
         'Auth' => array(
             'loginAction' => array(
-                'controller' => 'public',
+                'controller' => 'account',
                 'action' => 'login'
             ),
             'loginRedirect' => array(
@@ -44,7 +44,7 @@ class AppController extends Controller {
                 'action' => 'index'
             ),
             'logoutRedirect' => array(
-                'controller' => 'public',
+                'controller' => 'account',
                 'action' => 'login'
             ),
             'authorize' => array('Controller'),
@@ -53,6 +53,11 @@ class AppController extends Controller {
             'sessionKey' => false
         ),
     );
+
+    public function beforeFilter() {
+        $this->layout = 'private-layout';
+        $this->set('activeOption', $this->request->action);
+    }
 
     public function isAuthorized($usuario) {
         return true;

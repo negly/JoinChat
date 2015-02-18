@@ -16,13 +16,13 @@
                     'class' => 'form-control',
                     'placeholder' => '*********',
                     'div' => array('class' => 'form-group'),
-                    'after' => $this->Html->tag('p', $this->Html->link('¿Olvidó su contraseña?', array('controller' => 'public', 'action' => 'rememberPassword')))
+                    'after' => $this->Html->tag('p', $this->Html->link('¿Olvidó su contraseña?', array('action' => 'rememberPassword')))
                 )
             );
             echo $this->Form->submit('Entrar', array('class' => 'btn btn-primary pull-right'));
             echo $this->Html->link(
                 'Registrarme',
-                array('controller' => 'public', 'action' => 'register'),
+                array('action' => 'register'),
                 array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
             );
             echo $this->Form->end();
