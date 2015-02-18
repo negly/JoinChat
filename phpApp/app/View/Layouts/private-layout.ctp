@@ -4,8 +4,12 @@
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <title><?php echo $this->fetch('title'); ?> | JoinChat</title>
-        <link rel='stylesheet' type='text/css' href='/css/bootstrap.theme.min.css'>
-        <link rel='stylesheet' type='text/css' href='/css/styles-private.css'>
+        <?php
+            echo $this->Html->css(array(
+                'bootstrap.theme.min',
+                'styles-private'
+            ));
+        ?>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'></script>
@@ -34,7 +38,7 @@
                     $links['newchat']['html'] = $this->Html->link(
                         $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-plus btn btn-primary')) . $this->Html->tag('span', 'Nueva conversación'),
                         '#',
-                        array('escape' => false, 'class' => $links['newchat']['class'])
+                        array('escape' => false, 'class' => $links['newchat']['class'], 'data-toggle' => 'modal', 'data-target' => '#new-chat-modal')
                     );
                     $links['chats']['html'] = $this->Html->link(
                         $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-comment btn btn-primary')) . $this->Html->tag('span', 'Mis conversaciones'),
@@ -43,7 +47,7 @@
                     );
                     $links['settings']['html'] = $this->Html->link(
                         $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-wrench btn btn-primary')) . $this->Html->tag('span', 'Configuración'),
-                        '#',
+                        '/account/settings',
                         array('escape' => false, 'class' => $links['settings']['class'])
                     );
 
@@ -107,12 +111,75 @@ NAV;
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="new-chat-modal" tabindex="-1" role="dialog" aria-labelledby="new-chat-modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Contactos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php
+                            // echo $this->Form->create($model = 'Contact', $options = array('type' => 'get', 'url' => array('controller' => 'contacts', 'action' => 'search')));
+                            echo $this->Form->input('aliasEmail', array(
+                                    'type' => 'text',
+                                    'label' => 'Alias / Correo',
+                                    'class' => 'form-control',
+                                    'div' => array('class' => 'form-group')
+                                )
+                            );
+                            // echo $this->Form->end($options = null);
+                        ?>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">Contacto 1</a>
+                            <a href="#" class="list-group-item">Contacto 2</a>
+                            <a href="#" class="list-group-item">Contacto 3</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <ul id="chat-participants" class="list-inline pull-left">
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Default
+                            </li>
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Contacto 5
+                            </li>
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Default
+                            </li>
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Contacto 5
+                            </li>
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Default
+                            </li>
+                            <li class="contact-label">
+                                <span class="contact-remove">&times;</span>
+                                Contacto 5
+                            </li>
+                        </ul>
+                        <button type="button" class="btn btn-primary">Empezar chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script type='text/javascript' src='/js/jquery-1.11.2.min.js'></script>
         <script type='text/javascript' src='/js/bootstrap.min.js'></script>
         <script type='text/javascript'>
             $('#menu-toggle').click(function(e) {
                 e.preventDefault();
                 $('#wrapper').toggleClass('toggled');
+            });
+            $('.contact-remove').click(function(e) {
+                $(this).parent().fadeOut(200, function() {
+                    $(this).remove();
+                });
             });
         </script>
         <?php echo $this->fetch('scripts'); ?>
