@@ -1,6 +1,28 @@
 <?php
     $title = 'Mis conversaciones';
     $this->assign('title', $title);
+
+    $this->start('script');
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".chat-preview").click(function(event) {
+            location = $(this).attr('href');
+        });
+    });
+</script>
+<?php
+    $this->end();
+
+    $this->start('style');
+?>
+<style type="text/css">
+    .chat-preview {
+        cursor: pointer;
+    }
+</style>
+<?php
+    $this->end();
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -10,7 +32,7 @@
     </div>
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat')); ?>">
                 <div class="panel-heading">
                     <h3 class="panel-title">Joinner Ovalle</h3>
                 </div>
@@ -31,7 +53,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat')); ?>">
                 <div class="panel-heading">
                     <h3 class="panel-title">Joinner Ovalle</h3>
                 </div>
@@ -52,7 +74,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat')); ?>">
                 <div class="panel-heading">
                     <h3 class="panel-title">Juan Diego Pérez</h3>
                 </div>
