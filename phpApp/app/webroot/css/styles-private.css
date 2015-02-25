@@ -203,6 +203,11 @@
     }
 }
 
+/**
+ * Bubble css for messages inside chats
+ * http://www.ilikepixels.co.uk/drop/bubbler/
+ */
+
 .bubble {
     position: relative;
     border-radius: 5px;
