@@ -23,7 +23,8 @@
                 <tr>  
                     <td>Contraseña:</td>  
                     <td><input type="text" name="userpass" required="required" /></td>  
-                </tr>  
+                </tr>
+                <input type="hidden" value="json" name="format" />
                 <tr>  
                     <td><input type="submit" value="ENTRAR" /></td>  
                 </tr>  

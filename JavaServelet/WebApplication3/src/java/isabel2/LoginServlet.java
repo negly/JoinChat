@@ -33,9 +33,15 @@ public class LoginServlet extends HttpServlet{
         if(session!=null)  
         session.setAttribute("name", n);  
   
-        if(LoginDao.validate(n, p)){    
-            RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");    
-            rd.forward(request,response);    
+        if(LoginDao.validate(n, p)){   
+            // Leer parametro format
+            String format=request.getParameter("format");
+            if (format.equals("json")) {
+                out.print("{success:true}");
+            } else {
+                RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");    
+                rd.forward(request,response);  
+            }
         }    
         else{    
             out.print("<p style=\"color:red\">Su Usuario o Contraseña son Incorrectos</p>");    

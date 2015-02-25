@@ -21,18 +21,17 @@ public class LoginDao {
         PreparedStatement pst = null;  
         ResultSet rs = null;  
         
-        String url = "jdbc:mysql://localhost:3306/";  
+        String url = "jdbc:mysql://localhost/";  
         String dbName = "JoinChat";  
         String driver = "com.mysql.jdbc.Driver";  
         String userName = "root";  
-        String password = "2403";  
+        String password = "2403"; 
+
         try {  
             Class.forName(driver).newInstance();  
-            conn = DriverManager  
-                    .getConnection(url + dbName, userName, password);  
+            conn = DriverManager.getConnection(url + dbName, userName, password);  
   
-            pst = conn  
-                    .prepareStatement("select * from Usuario where usuario=? and password=?");  
+            pst = conn.prepareStatement("select * from Login where usuario=? and password=?");  
             pst.setString(1, name);  
             pst.setString(2, pass);  
   
