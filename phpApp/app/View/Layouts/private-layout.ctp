@@ -182,6 +182,6 @@ NAV;
                 });
             });
         </script>
-        <?php echo $this->fetch('scripts'); ?>
+        <?php echo $this->fetch('script'); ?>
     </body>
 </html>

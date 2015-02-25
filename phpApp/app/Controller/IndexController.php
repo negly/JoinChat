@@ -48,4 +48,8 @@ class IndexController extends AppController {
         return $this->redirect($this->Auth->logout());
     }
 
+    public function viewChat() {
+
+    }
+
 }
