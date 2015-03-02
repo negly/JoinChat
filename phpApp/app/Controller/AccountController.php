@@ -46,10 +46,15 @@ class AccountController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            if ($this->Auth->login($this->request->data['User'])) {
+            if ($this->request->query('force') === 'true') {
+                if ($this->Auth->login($this->request->data['User'])) {
+                    return $this->redirect($this->Auth->redirectUrl());
+                }
+            }
+            else if ($this->Auth->login()) {
                 return $this->redirect($this->Auth->redirectUrl());
             }
-            $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar');
+            $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar', $element = 'default', $params = array(), $key = 'auth');
         }
     }
 
