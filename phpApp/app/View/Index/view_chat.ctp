@@ -36,6 +36,12 @@
         background-color: #eee;
         margin-top: -15px;
         padding-top: 5px;
+        display: none;
+    }
+
+    #videochat video {
+        max-width: 300px;
+        max-height: 150px;
     }
 </style>
 <?php
@@ -60,6 +66,9 @@
                                 Cámara de <?php echo $userAlias; ?>
                             </video>
                         </div>
+                        <div id="video-id" class="col-xs-12 text-center">Código del video: WXG67F54</div>
+                        <div id="status" style="display: none;" class="col-xs-12"></div>
+                        <div id="streaming" style="display: none;" class="col-xs-12"></div>
                     </div>
                     <div class="bubble bubble-right">
                         <div class="pointer"></div>
@@ -74,14 +83,17 @@
                 <div class="panel-footer text-right" style="position: absolute; bottom: 0; width: 100%;">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="col-xs-12">
+                                <button id="video-btn" class="pull-left btn btn-success btn-xs glyphicon glyphicon-facetime-video"></button>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xs-11">
                                 <textarea class="form-control"></textarea>
                             </div>
                             <div class="col-xs-1">
                                 <button class="btn btn-success">Enviar</button>
                             </div>
-                        </div>
-                        <div class="row">
                         </div>
                     </div>
                 </div>
