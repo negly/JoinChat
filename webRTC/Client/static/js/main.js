@@ -1,8 +1,11 @@
-var ws = new WebSocket(location.href.replace('http', 'ws').replace('room', 'ws'));
-// var configuration = {iceServers: [{ url: 'stun:stun.l.google.com:19302' }]};
-var configuration = {iceServers: [{ url: 'stun:negly14.koding.io:8080' }]};
+var token = prompt("Please enter the id of the conversation", "123456789");
+var ws = new WebSocket("ws://negly14.koding.io:7000/ws/"+token);
+var configuration = {iceServers: [{ url: 'stun:negly14.koding.io:3478' }]};
 var initiator;
 var pc = new webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+var channel = pc.createDataChannel("chat"+token);
+$("#btnSend").disabled = true;
+
 
 function initiatorCtrl(event) {
     console.log(event.data);
@@ -28,12 +31,18 @@ function init() {
         video: true
     };
     getUserMedia(constraints, connect, fail);
+    pc.ondatachannel = function(evt){
+        channel = evt.channel;
+        channel.onopen = function () {
+            $('#btnSend').disabled = false;
+            $('#chatControls').disabled = false;
+        }
+    };
 }
 
 
 function connect(stream) {
-    // pc = new RTCPeerConnection();
-    // pc = webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+
     if (stream) {
         pc.addStream(stream);
         $('#local').attachStream(stream);
@@ -100,6 +109,7 @@ function receiveOffer(offer) {
 function receiveAnswer(answer) {
     log('received answer');
     pc.setRemoteDescription(new RTCSessionDescription(answer));
+    pc.Datachannel
 }
 
 
@@ -118,6 +128,11 @@ function fail() {
     $('#status').text(Array.prototype.join.call(arguments, ' '));
     $('#status').addClass('error');
     console.error.apply(console, arguments);
+}
+
+function sendMessage(){
+    $("#messages").innerHTML+="<br />"+$("#msg").value;
+    channel.send($("#msg").value);
 }
 
 

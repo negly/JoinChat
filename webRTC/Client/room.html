@@ -3,10 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Tornado WebRTC Example</title>
-    <link rel="stylesheet" type="text/css" href="{{ static_url('css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="{{ static_url('js/webrtc-adapter.js') }}"></script>
-    <script src="{{ static_url('js/main.js') }}"></script>
+    <script src="static/js/webrtc-adapter.js"></script>
+    <script src="static/js/main.js"></script>
   </head>
   <body>
     <div class="container">
@@ -16,7 +16,11 @@
       </div>
     </div>
     <div>
-      <textarea placeholder="Escribe tu mensaje publico"></textarea>
+      <div id="chatControls" disabled>
+        <input type="text" id="msg">
+        <button onclick="sendMessage" id="btnSend">Send</button>
+      </div>
+      <textarea id="messages" placeholder="The messages sent!" style="margin-top:10px;" disabled></textarea>
     </div>
     <footer>
       <span id="status" class="small"></span>
