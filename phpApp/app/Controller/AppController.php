@@ -48,7 +48,7 @@ class AppController extends Controller {
                 'action' => 'login'
             ),
             'authorize' => array('Controller'),
-            'authenticate' => array('Form'),
+            'authenticate' => array('Isabel'),
             'authError' => 'No puede acceder a esta página o realizar esa acción debido a falta de permisos. Debe hablar con un Administrador para realizar esta operación.',
             'sessionKey' => false
         ),

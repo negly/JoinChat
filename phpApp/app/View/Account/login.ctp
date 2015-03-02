@@ -10,7 +10,7 @@
         <?php
             echo $this->Form->create('User');
             echo $this->Form->input('username', array('label' => 'Usuario', 'class' => 'form-control', 'placeholder' => 'Ej: joinnerovalle', 'div' => array('class' => 'form-group')));
-            echo $this->Form->input('password', array(
+            echo $this->Form->input('userpass', array(
                     'type' => 'password',
                     'label' => 'Contraseña',
                     'class' => 'form-control',
