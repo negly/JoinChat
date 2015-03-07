@@ -70,3 +70,17 @@ body {
     float: none;
     margin: 0 auto;
 }
+
+div.form-group.required label {
+    font-weight: bold;
+}
+
+div.form-group.required label:first-child:after {
+    content: " *";
+    color: orange;
+}
+
+div.form-group label.error {
+    color: orange;
+
+}

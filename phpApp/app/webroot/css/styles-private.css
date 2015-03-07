@@ -107,6 +107,7 @@
 .sidebar-nav li span.icon {
     text-indent: 0;
     margin-right: 10px;
+    font-weight: normal;
 }
 
 .sidebar-nav li a:hover {

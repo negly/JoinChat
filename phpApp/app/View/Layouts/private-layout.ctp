@@ -53,6 +53,7 @@ THE SOFTWARE. -->
                         'newchat' => array('class' => '', 'html' => ''),
                         'chats' => array('class' => '', 'html' => ''),
                         'settings' => array('class' => '', 'html' => ''),
+                        'register' => array('class' => '', 'html' => '')
                     );
                     
                     $links[$activeOption]['class'] = 'active';
@@ -78,6 +79,14 @@ THE SOFTWARE. -->
                         array('escape' => false, 'class' => $links['settings']['class'])
                     );
 
+                    if (AuthComponent::user('guest') && AuthComponent::user('guest') === true) {
+                        $links['register']['html'] = '<li>' . $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-log-in btn btn-primary')) . $this->Html->tag('span', 'Registrarme'),
+                            '/account/register',
+                            array('escape' => false, 'class' => $links['register']['class'])
+                        ) . '</li>';
+                    }
+
                     echo <<<NAV
                         <ul class='sidebar-nav'>
                             <li class='sidebar-brand'>
@@ -90,6 +99,7 @@ THE SOFTWARE. -->
                             <li>
                                 {$links['index']['html']}
                             </li>
+                            {$links['register']['html']}
                             <li>
                                 {$links['newchat']['html']}
                             </li>
@@ -196,8 +206,11 @@ NAV;
                 </div>
             </div>
         </div>
-        <script type='text/javascript' src='/js/jquery-1.11.2.min.js'></script>
-        <script type='text/javascript' src='/js/bootstrap.min.js'></script>
+        <?php
+            echo $this->Html->script('jquery-1.11.2.min');
+            echo $this->Html->script('bootstrap.min');
+            echo $this->Html->script('ydn.db-is-core-qry');
+        ?>
         <script type='text/javascript'>
             $('#menu-toggle').click(function(e) {
                 e.preventDefault();
@@ -206,6 +219,56 @@ NAV;
             $('.contact-remove').click(function(e) {
                 $(this).parent().fadeOut(200, function() {
                     $(this).remove();
+                });
+            });
+
+            var guest, db;
+
+            $(document).ready(function() {
+                var schema = {
+                  autoSchema: false,
+                  stores: [{
+                    name: 'guest',
+                    autoIncrement: false,
+                    indexes: [
+                        {
+                            name: 'alias'
+                        },
+                        {
+                            name: 'email'
+                        }
+                    ]
+                  }]
+                };
+                db = new ydn.db.Storage('joinchat', schema);
+
+                function init() {
+                    db.get('guest', 1)
+                        .done(function(record) {
+                            if (record) {
+                                guest = record;
+                                guestFound = guestFound || function() {};
+                                if (guestFound) {
+                                    guestFound();
+                                }
+                            }
+                        })
+                        .fail(function(e) {
+                            console.log(e.message);
+                        });
+                }
+
+                function guestFound() {
+                    if ($userAlias = $("#UserAlias")) {
+                        $userAlias.val(guest.alias);
+                    }
+                    if ($userEmail = $("#UserEmail")) {
+                        $userEmail.val(guest.email);
+                    }
+                }
+
+                db.onReady(function() {
+                  init();
                 });
             });
         </script>
