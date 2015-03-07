@@ -31,7 +31,43 @@
  
     $title = 'Formulario de registro';
     $this->assign('title', $title);
+
+    $this->start('script');
+
+    echo $this->Html->script('jquery.validate.min');
+    echo $this->Html->script('localization/jquery-validate-es.min');
 ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#UserLoginGuestForm").validate({
+            rules: {
+                "data[User][username]": {
+                    required: true,
+                    minlength: 3
+                },
+                "data[User][alias]": {
+                    required: true,
+                    minlength: 3
+                },
+                "data[User][email]": {
+                    required: true,
+                    email: true
+                }
+            },
+            submitHandler: function(form) {
+                $(form).find('input[type=submit]').prop('disabled', true);
+                <?php if (!AuthComponent::user()) : ?>
+                    guest = guest || {};
+                    guest.alias = $("#UserAlias").val();
+                    guest.email = $("#UserEmail").val();
+                    db.put('guest', guest, 1);
+                <?php endif; ?>
+                form.submit();
+            }
+        });
+    });
+</script>
+<?php $this->end(); ?>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">JoinChat - <?php echo $title; ?></h3>
@@ -39,13 +75,19 @@
     <div class="panel-body">
         <?php
             echo $this->Form->create('User');
-            echo $this->Form->input('username', array('label' => 'Usuario', 'class' => 'form-control', 'placeholder' => 'Ej: joinnerovalle', 'div' => array('class' => 'form-group')));
+            echo $this->Form->input('username', array(
+                'label' => 'Usuario',
+                'class' => 'form-control',
+                'placeholder' => 'Ej: joinnerovalle',
+                'div' => array('class' => 'form-group required')
+                )
+            );
             echo $this->Form->input('password', array(
                     'type' => 'password',
                     'label' => 'Contraseña',
                     'class' => 'form-control',
                     'placeholder' => '*********',
-                    'div' => array('class' => 'form-group')
+                    'div' => array('class' => 'form-group required')
                 )
             );
             echo $this->Form->input('passwordConfirm', array(
@@ -53,19 +95,26 @@
                     'label' => 'Confirmación de contraseña',
                     'class' => 'form-control',
                     'placeholder' => '*********',
-                    'div' => array('class' => 'form-group')
+                    'div' => array('class' => 'form-group required')
                 )
             );
             echo $this->Form->input('alias', array(
                     'label' => 'Alias',
                     'class' => 'form-control',
                     'placeholder' => 'Ej: Joi',
-                    'div' => array('class' => 'form-group'),
+                    'div' => array('class' => 'form-group required'),
                     'after' => $this->Html->para('help-block', 'Será el apodo con el que las demás personas te reconoceran')
                 )
             );
-            echo $this->Form->input('email', array('label' => 'Correo', 'class' => 'form-control', 'placeholder' => 'Ej: joinner@gmail.com', 'div' => array('class' => 'form-group')));
+            echo $this->Form->input('email', array(
+                'label' => 'Correo',
+                'class' => 'form-control',
+                'placeholder' => 'Ej: joinner@gmail.com',
+                'div' => array('class' => 'form-group required')
+                )
+            );
             echo $this->Form->submit('Registrarme', array('class' => 'btn btn-primary pull-right'));
+
             echo $this->Html->link(
                 '¿Ya estás registrado?',
                 array('action' => 'login'),

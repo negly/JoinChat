@@ -47,10 +47,10 @@ class AccountController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $publicActions = array('index', 'login', 'register', 'rememberPassword');
+        $publicActions = array('index', 'login', 'loginGuest', 'register', 'rememberPassword');
         $this->Auth->allow($publicActions);
         if ($this->Auth->loggedIn()) {
-            if (in_array(strtolower($this->request->action), $publicActions)) {
+            if (in_array(strtolower($this->request->action), $publicActions) && strtolower($this->request->action) !== 'register') {
                 $this->redirect($this->Auth->loginRedirect);
             }
         } else {
@@ -76,15 +76,18 @@ class AccountController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            if ($this->request->query('force') === 'true') {
-                if ($this->Auth->login($this->request->data['User'])) {
-                    return $this->redirect($this->Auth->redirectUrl());
-                }
-            }
-            else if ($this->Auth->login()) {
+            if ($this->Auth->login()) {
                 return $this->redirect($this->Auth->redirectUrl());
             }
             $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar', $element = 'default', $params = array(), $key = 'auth');
+        }
+    }
+
+    public function loginGuest() {
+        if ($this->request->is('post')) {
+            $this->request->data['User']['guest'] = true;
+            $this->Auth->login($this->request->data['User']);
+            return $this->redirect($this->Auth->redirectUrl());
         }
     }
 

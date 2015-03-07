@@ -29,9 +29,39 @@
  * THE SOFTWARE.
  */
  
-    $title = 'Iniciar sesión';
+    $title = 'Iniciar sesión como invitado';
     $this->assign('title', $title);
+
+    $this->start('script');
+
+    echo $this->Html->script('jquery.validate.min');
+    echo $this->Html->script('localization/jquery-validate-es.min');
 ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#UserLoginGuestForm").validate({
+            rules: {
+                "data[User][alias]": {
+                    required: true,
+                    minlength: 3
+                },
+                "data[User][email]": {
+                    required: true,
+                    email: true
+                }
+            },
+            submitHandler: function(form) {
+                $(form).find('input[type=submit]').prop('disabled', true);
+                guest = guest || {};
+                guest.alias = $("#UserAlias").val();
+                guest.email = $("#UserEmail").val();
+                db.put('guest', guest, 1);
+                form.submit();
+            }
+        });
+    });
+</script>
+<?php $this->end(); ?>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">JoinChat - <?php echo $title; ?></h3>
@@ -39,25 +69,32 @@
     <div class="panel-body">
         <?php
             echo $this->Form->create('User');
-            echo $this->Form->input('username', array('label' => 'Usuario', 'class' => 'form-control', 'placeholder' => 'Ej: joinnerovalle', 'div' => array('class' => 'form-group')));
-            echo $this->Form->input('userpass', array(
-                    'type' => 'password',
-                    'label' => 'Contraseña',
+            echo $this->Form->input('alias', array(
+                    'label' => 'Alias',
                     'class' => 'form-control',
-                    'placeholder' => '*********',
-                    'div' => array('class' => 'form-group'),
-                    'after' => $this->Html->tag('p', $this->Html->link('¿Olvidó su contraseña?', array('action' => 'rememberPassword')))
+                    'placeholder' => 'Ej: Joi',
+                    'div' => array('class' => 'form-group required'),
+                    'after' => $this->Html->para('help-block', 'Será el apodo con el que las demás personas te reconoceran')
+                )
+            );
+            echo $this->Form->input('email', array(
+                    'label' => 'Correo',
+                    'class' => 'form-control',
+                    'placeholder' => 'Ej: joinner@gmail.com',
+                    'div' => array('class' => 'form-group required'),
+                    'required' => 'required'
                 )
             );
             echo $this->Form->submit('Entrar', array('class' => 'btn btn-primary pull-right'));
+
             echo $this->Html->link(
                 'Registrarme',
                 array('action' => 'register'),
                 array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
             );
             echo $this->Html->link(
-                'Entrar como invitado',
-                array('action' => 'loginGuest'),
+                '¿Ya estás registrado?',
+                array('action' => 'login'),
                 array('class' => 'btn btn-link pull-right', 'style' => 'margin-right: 10px;')
             );
             echo $this->Form->end();

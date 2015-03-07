@@ -31,8 +31,12 @@ THE SOFTWARE. -->
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <title><?php echo $this->fetch('title'); ?> | JoinChat</title>
-        <link rel='stylesheet' type='text/css' href='/css/bootstrap.theme.min.css'>
-        <link rel='stylesheet' type='text/css' href='/css/styles-public.css'>
+        <?php 
+            echo $this->Html->css(array(
+                'bootstrap.theme.min',
+                'styles-public.css'
+            ));
+        ?>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'></script>
@@ -43,7 +47,7 @@ THE SOFTWARE. -->
     <body>
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="centering col-xs-4">
+                <div class="centering col-xs-5">
                     <?php 
                         $flashMsg = $this->Session->flash();
                         $authMsg = $this->Session->flash('auth');
@@ -70,8 +74,62 @@ THE SOFTWARE. -->
                 </div>
             </div>
         </div>
-        <script type='text/javascript' src='/js/jquery-1.11.2.min.js'></script>
-        <script type='text/javascript' src='/js/bootstrap.min.js'></script>
-        <?php echo $this->fetch('scripts'); ?>
+        <?php
+            echo $this->Html->script('jquery-1.11.2.min');
+            echo $this->Html->script('bootstrap.min');
+            echo $this->Html->script('ydn.db-is-core-qry');
+        ?>
+        <script type="text/javascript">
+            var guest, db;
+
+            $(document).ready(function() {
+                var schema = {
+                  autoSchema: false,
+                  stores: [{
+                    name: 'guest',
+                    autoIncrement: false,
+                    indexes: [
+                        {
+                            name: 'alias'
+                        },
+                        {
+                            name: 'email'
+                        }
+                    ]
+                  }]
+                };
+                db = new ydn.db.Storage('joinchat', schema);
+
+                function init() {
+                    db.get('guest', 1)
+                        .done(function(record) {
+                            if (record) {
+                                guest = record;
+                                guestFound = guestFound || function() {};
+                                if (guestFound) {
+                                    guestFound();
+                                }
+                            }
+                        })
+                        .fail(function(e) {
+                            console.log(e.message);
+                        });
+                }
+
+                function guestFound() {
+                    if ($userAlias = $("#UserAlias")) {
+                        $userAlias.val(guest.alias);
+                    }
+                    if ($userEmail = $("#UserEmail")) {
+                        $userEmail.val(guest.email);
+                    }
+                }
+
+                db.onReady(function() {
+                  init();
+                });
+            });
+        </script>
+        <?php echo $this->fetch('script'); ?>
     </body>
 </html>
