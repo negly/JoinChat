@@ -26,7 +26,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
        
       Class.forName("com.mysql.jdbc.Driver");
       connection = DriverManager.getConnection(connectionURL, "root", "2403");
-      PreparedStatement pst = connection.prepareStatement("insert into Usuarios values(?,?,?,?)");
+      PreparedStatement pst = connection.prepareStatement("insert into Usuarios (usuario, password, nickname, email) values(?,?,?,?)");
       pst.setString(1,name);
       pst.setString(2,pass);      
       pst.setString(3,nick);

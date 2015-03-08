@@ -23,7 +23,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
        
       Class.forName("com.mysql.jdbc.Driver");
       connection = DriverManager.getConnection(connectionURL, "root", "2403");
-      PreparedStatement pst = connection.prepareStatement("delete from Usuarios where nombre=?");
+      PreparedStatement pst = connection.prepareStatement("delete from Usuarios where usuario=?");
       pst.setString(1,name);
  
       int i = pst.executeUpdate();

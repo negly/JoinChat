@@ -24,9 +24,9 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
        
       Class.forName("com.mysql.jdbc.Driver");
       connection = DriverManager.getConnection(connectionURL, "root", "2403");
-      PreparedStatement pst = connection.prepareStatement("update Usuarios set nickname=? where nombre=?");
-      pst.setString(1,name);
-      pst.setString(2,nickname);
+      PreparedStatement pst = connection.prepareStatement("update Usuarios set nickname=? where usuario=?");
+      pst.setString(1,nickname);
+      pst.setString(2,name);
  
       int i = pst.executeUpdate();
       if(i!=0){
