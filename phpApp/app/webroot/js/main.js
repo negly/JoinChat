@@ -40,133 +40,186 @@ $(document).ready(function() {
                     videoId = prompt("Ingrese el identificador de la video llamada a la que se quiere unir");
                 }
             }
-            $("#video-id").html("Código del video: <b>" + videoId + "</b>");
+
+            if (videoId) {
+                $("#video-id").html("Código del video: <b>" + videoId + "</b>");
             
-            var ws = new WebSocket('ws://negly14.koding.io:7000/ws/' + videoId);
-            ws.onmessage = initiatorCtrl;
-            var configuration = {iceServers: [{ url: 'stun:negly14.koding.io:3478' }]};
-            var initiator;
-            var pc = new webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+                var ws = new WebSocket('ws://negly14.koding.io:7000/ws/' + videoId);
+                var configuration = {iceServers: [{ url: 'stun:negly14.koding.io:3478' }]};
+                var initiator;
+                var pc = new webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+                var channel;
 
-            function initiatorCtrl(event) {
-                console.log(event.data);
-                if (event.data == "fullhouse") {
-                    alert("full house");
-                }
-                if (event.data == "initiator") {
-                    initiator = false;
-                    init();
-                }
-                if (event.data == "not initiator") {
-                    initiator = true;
-                    init();
-                }
-            }
-
-            function init() {
-                var constraints = {
-                    audio: true,
-                    video: true
-                };
-                getUserMedia(constraints, connect, fail);
-            }
-
-            function connect(stream) {
-                // pc = new RTCPeerConnection();
-                // pc = webkitRTCPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
-                if (stream) {
-                    pc.addStream(stream);
-                    $('#local').attachStream(stream);
-                }
-
-                pc.onaddstream = function(event) {
-                    $('#remote').attachStream(event.stream);
-                    logStreaming(true);
-                };
-                pc.onicecandidate = function(event) {
-                    if (event.candidate) {
-                        ws.send(JSON.stringify(event.candidate));
+                $(window).bind('beforeunload', function(){
+                    if (pc && pc.close) {
+                        pc.close();
                     }
-                };
-                ws.onmessage = function (event) {
-                    var signal = JSON.parse(event.data);
-                    if (signal.sdp) {
-                        if (initiator) {
-                            receiveAnswer(signal);
-                        } else {
-                            receiveOffer(signal);
+                });
+
+                function initiatorCtrl(event) {
+                    console.log(event.data);
+                    if (event.data == "fullhouse") {
+                        alert("full house");
+                    }
+                    if (event.data == "initiator") {
+                        initiator = false;
+                        init();
+                    }
+                    if (event.data == "not initiator") {
+                        initiator = true;
+                        init();
+                    }
+                }
+
+                ws.onmessage = initiatorCtrl;
+
+                function init() {
+                    var constraints = {
+                        audio: true,
+                        video: true
+                    };
+                    if (initiator) {
+                        var channelOptions = 
+                        {
+                            reliable: false
                         }
-                    } else if (signal.candidate) {
-                        pc.addIceCandidate(new RTCIceCandidate(signal));
+                        channel = pc.createDataChannel("chat"+videoId, channelOptions);
+                        channel.onmessage = function (evt) {
+                            console.info(evt);
+                            createMsg(false, evt.data);
+                        };
+
+                        channel.onopen = function (evt) {
+                            console.log("Channel " + channel.label + " is open");
+                            enableChatFields();
+                        };
+                        
+                        channel.onclose = function (evt) {
+                            console.log('RTCDataChannel closed.');
+                        };
+                    } else {
+                        pc.ondatachannel = function(evt){
+                            channel = evt.channel;
+                            channel.onopen = function () {
+                                console.log("Channel " + channel.label + " is open");
+                                enableChatFields();
+                            };
+                            channel.onmessage = function (evt) {
+                                console.info(evt);
+                                createMsg(false, evt.data);
+                            };
+                        };
                     }
-                };
-
-                if (initiator) {
-                    createOffer();
-                } else {
-                    log('waiting for offer...');
+                    getUserMedia(constraints, connect, fail);
                 }
-                logStreaming(false);
-            }
+
+                function connect(stream) {
+                    if (stream) {
+                        pc.addStream(stream);
+                        $('#local').attachStream(stream);
+                    }
+
+                    pc.onaddstream = function(event) {
+                        $('#remote').attachStream(event.stream);
+                        logStreaming(true);
+                    };
+                    pc.onicecandidate = function(event) {
+                        if (event.candidate) {
+                            ws.send(JSON.stringify(event.candidate));
+                        }
+                    };
+                    ws.onmessage = function (event) {
+                        var signal = JSON.parse(event.data);
+                        if (signal.sdp) {
+                            if (initiator) {
+                                receiveAnswer(signal);
+                            } else {
+                                receiveOffer(signal);
+                            }
+                        } else if (signal.candidate) {
+                            pc.addIceCandidate(new RTCIceCandidate(signal));
+                        }
+                    };
+
+                    if (initiator) {
+                        createOffer();
+                    } else {
+                        log('waiting for offer...');
+                    }
+                    logStreaming(false);
+                }
 
 
-            function createOffer() {
-                log('creating offer...');
-                pc.createOffer(function(offer) {
-                    log('created offer...');
-                    pc.setLocalDescription(offer, function() {
-                        log('sending to remote...');
-                        ws.send(JSON.stringify(offer));
-                    }, fail);
-                }, fail);
-            }
-
-
-            function receiveOffer(offer) {
-                log('received offer...');
-                pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
-                    log('creating answer...');
-                    pc.createAnswer(function(answer) {
-                        log('created answer...');
-                        pc.setLocalDescription(answer, function() {
-                            log('sent answer');
-                            ws.send(JSON.stringify(answer));
+                function createOffer() {
+                    log('creating offer...');
+                    pc.createOffer(function(offer) {
+                        log('created offer...');
+                        pc.setLocalDescription(offer, function() {
+                            log('sending to remote...');
+                            ws.send(JSON.stringify(offer));
                         }, fail);
                     }, fail);
-                }, fail);
-            }
+                }
 
 
-            function receiveAnswer(answer) {
-                log('received answer');
-                pc.setRemoteDescription(new RTCSessionDescription(answer));
-            }
+                function receiveOffer(offer) {
+                    log('received offer...');
+                    pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
+                        log('creating answer...');
+                        pc.createAnswer(function(answer) {
+                            log('created answer...');
+                            pc.setLocalDescription(answer, function() {
+                                log('sent answer');
+                                ws.send(JSON.stringify(answer));
+                            }, fail);
+                        }, fail);
+                    }, fail);
+                }
 
 
-            function log() {
-                $('#status').text(Array.prototype.join.call(arguments, ' '));
-                console.log.apply(console, arguments);
-            }
+                function receiveAnswer(answer) {
+                    log('received answer');
+                    pc.setRemoteDescription(new RTCSessionDescription(answer));
+                    pc.Datachannel
+                }
 
 
-            function logStreaming(streaming) {
-                $('#streaming').text(streaming ? '[streaming]' : '[..]');
-            }
+                function log() {
+                    $('#status').text(Array.prototype.join.call(arguments, ' '));
+                    console.log.apply(console, arguments);
+                }
 
 
-            function fail() {
-                $('#status').text(Array.prototype.join.call(arguments, ' '));
-                $('#status').addClass('error');
-                console.error.apply(console, arguments);
-            }
+                function logStreaming(streaming) {
+                    $('#streaming').text(streaming ? '[streaming]' : '[..]');
+                }
 
 
-            jQuery.fn.attachStream = function(stream) {
-                this.each(function() {
-                    this.src = URL.createObjectURL(stream);
-                    this.play();
+                function fail() {
+                    $('#status').text(Array.prototype.join.call(arguments, ' '));
+                    $('#status').addClass('error');
+                    console.error.apply(console, arguments);
+                }
+
+                function sendChatMessage() {
+                    channel.send($("#msg").val());
+                    createMsg(true, $("#msg").val());
+                    $("#msg").val("");
+                }
+
+                $("#sendChatBtn").on('click', function() {
+                    sendChatMessage();
                 });
-            };
+
+                jQuery.fn.attachStream = function(stream) {
+                    this.each(function() {
+                        this.src = URL.createObjectURL(stream);
+                        this.play();
+                    });
+                };
+            } else {
+                videoId = false;
+            }
         }
 
         $('#videochat').slideToggle();
@@ -183,4 +236,22 @@ function randomString() {
         randomstring += chars.substring(rnum,rnum+1);
     }
     return randomstring;
+}
+
+function createMsg(localUser, msg) {
+    var containerClass;
+    if (localUser) {
+        containerClass = 'bubble-left';
+    } else {
+        containerClass = 'bubble-right';
+    }
+
+    $msgContainer = $("<div>").addClass('bubble').addClass(containerClass).html("<div class='pointer'></div>" + msg);
+    
+    $("#textchat").append($msgContainer);
+}
+
+function enableChatFields() {
+    $("#msg").prop('disabled', false);
+    $("#sendChatBtn").prop('disabled', false);
 }

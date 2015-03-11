@@ -71,7 +71,7 @@
 
     #videochat video {
         max-width: 300px;
-        max-height: 150px;
+        max-height: 200px;
     }
 </style>
 <?php
@@ -97,18 +97,10 @@
                             </video>
                         </div>
                         <div id="video-id" class="col-xs-12 text-center"></div>
-                        <div id="status" style="display: none;" class="col-xs-12"></div>
-                        <div id="streaming" style="display: none;" class="col-xs-12"></div>
+                        <div id="status" style="display: block;" class="col-xs-12"></div>
+                        <div id="streaming" style="display: block;" class="col-xs-12"></div>
                     </div>
-                    <div class="bubble bubble-right">
-                        <div class="pointer"></div>
-                        Qué más pues Nigga? Cómo vas?
-                    </div>
-                    <div class="bubble bubble-left">
-                        <div class="pointer"></div>
-                        Todo bien pa<br>
-                        Vos que
-                    </div>
+                    <div id="textchat"></div>
                 </div>
                 <div class="panel-footer text-right" style="position: absolute; bottom: 0; width: 100%;">
                     <div class="container-fluid">
@@ -118,11 +110,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-11">
-                                <textarea class="form-control"></textarea>
+                            <div class="col-xs-12">
+                                <textarea id="msg" class="form-control" disabled="disabled"></textarea>
                             </div>
-                            <div class="col-xs-1">
-                                <button class="btn btn-success">Enviar</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button id="sendChatBtn" class="btn btn-success" disabled="disabled">Enviar</button>
                             </div>
                         </div>
                     </div>
