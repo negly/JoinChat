@@ -18,6 +18,7 @@
                     <td>Nuevo NickName:</td>  
                     <td><input type="text" name="nickname" required="required" /></td>  
                 </tr>
+                <input type="hidden" value="json" name="format" />
                 <tr>  
                     <td><input type="submit" value="Actualizar" /></td>  
                 </tr>  

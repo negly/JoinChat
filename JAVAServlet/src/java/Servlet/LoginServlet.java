@@ -39,8 +39,7 @@ public class LoginServlet extends HttpServlet {
                 user.put("nickname",u.getNickname());
                 user.put("email", u.getEmail());
                 user.put("status",u.getStatus());
-                json.put("user", user);
-                
+                json.put("user", user);                
                 out.print(json);
             }
         } else {
@@ -48,6 +47,7 @@ public class LoginServlet extends HttpServlet {
             if (format.equals("json")) {
                 JSONObject json = new JSONObject();
                 json.put("success", false);
+                json.put("message","Usuario no registrado");
                 out.print(json);
                
                 

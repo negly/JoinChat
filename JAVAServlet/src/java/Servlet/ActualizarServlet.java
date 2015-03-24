@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 
 public class ActualizarServlet extends HttpServlet {
 
@@ -30,14 +31,28 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
  
       int i = pst.executeUpdate();
       if(i!=0){
-        pw.println("<br>NICKNAME ACTUALIZADO");          
+          String format = request.getParameter("format");
+       if (format.equals("json")) {
+                JSONObject json = new JSONObject();
+                json.put("success", true);
+                json.put("message","Datos Actualizados");
+                pw.print(json);
+            }
+                 
       }
       else{
-        pw.println("<br>ERROR AL ACTUALIZAR");
+        String format = request.getParameter("format");
+            if (format.equals("json")) {
+                JSONObject json = new JSONObject();
+                json.put("success", false);
+                json.put("message","Error al actualizar");
+                pw.print(json);
+       }
        }
     }
     catch (Exception e){
       pw.println(e);
     }
+    pw.close();
   }
 }

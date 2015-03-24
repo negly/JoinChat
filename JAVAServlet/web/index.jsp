@@ -22,7 +22,7 @@
                     <td><a href="Eliminar.jsp">ELIMINAR</a></td>    
                 </tr>
                 <tr>  
-                    <td><a href="ActualizarNickname.jsp">ACTUALIZAR</a></td>    
+                    <td><a href="Actualizar.jsp">ACTUALIZAR</a></td>    
                 </tr>
             </table>  
         </fieldset>  
