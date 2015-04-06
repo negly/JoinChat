@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
-public class ActualizarServlet extends HttpServlet {
+public class ActualizarPasswordServlet extends HttpServlet {
 
 public void doPost(HttpServletRequest request, HttpServletResponse response)
                                  throws ServletException, IOException{
@@ -21,17 +21,17 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
     Connection connection;
     try{
       String name = request.getParameter("username");
-      String nickname = request.getParameter("nickname");
-      String email = request.getParameter("email");
+      String pass = request.getParameter("userpass");
+
        
       Class.forName("com.mysql.jdbc.Driver");
       connection = DriverManager.getConnection(connectionURL, "root", "2403");
       
       
-      PreparedStatement pst = connection.prepareStatement("update Usuarios set nickname=?, email=? where usuario=?");
-      pst.setString(1,nickname);
-      pst.setString(2,email);
-      pst.setString(3,name);
+      PreparedStatement pst = connection.prepareStatement("update Usuarios set password=? where usuario=?");
+      pst.setString(1,pass);
+      pst.setString(2,name);
+
      
  
       int i = pst.executeUpdate();

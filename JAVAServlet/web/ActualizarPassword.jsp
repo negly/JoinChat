@@ -6,21 +6,17 @@
 <title>Actualizar Nickname</title>  
 </head>  
 <body>  
-    <form action="ActualizarServlet" method="post">  
+    <form action="ActualizarPasswordServlet" method="post">  
         <fieldset style="width: 300px">  
-            <legend>ACTUALIZAR NICKNAME y EMAIL DEL USUARIO: </legend>  
+            <legend>ACTUALIZAR PASSWORD DEL USUARIO: </legend>  
             <table>  
                 <tr>  
                     <td>Usuario:</td>  
                     <td><input type="text" name="username" required="required" /></td>  
                 </tr>
                 <tr>  
-                    <td>Nuevo NickName:</td>  
-                    <td><input type="text" name="nickname" required="required" /></td>  
-                </tr>
-                <tr>  
-                    <td>Nuevo Email:</td>  
-                    <td><input type="text" name="email" required="required" /></td>  
+                    <td>Nueva Password:</td>  
+                    <td><input type="text" name="userpass" /></td>  
                 </tr>
                 <input type="hidden" value="json" name="format" />
                 <tr>  
