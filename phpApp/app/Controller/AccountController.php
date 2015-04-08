@@ -33,6 +33,8 @@ App::uses('AppController', 'Controller');
 
 class AccountController extends AppController {
 
+    const URL_CHECK_USER = "http://uakka468c67a.azul24.koding.io:8080/WebApplication3/LoginServlet?format=json";
+
     /*********************************************************************
      *              CONTROLLER DATA MEMBERS
      *********************************************************************/
@@ -76,10 +78,16 @@ class AccountController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            if ($this->Auth->login()) {
-                return $this->redirect($this->Auth->redirectUrl());
+            $ipaddress = gethostbyname(self::URL_CHECK_USER);
+            if ($ipaddress === self::URL_CHECK_USER) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible');
             }
-            $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar', $element = 'default', $params = array(), $key = 'auth');
+            else {
+                if ($this->Auth->login()) {
+                    return $this->redirect($this->Auth->redirectUrl());
+                }
+                $this->Session->setFlash('Usuario y/o contraseña inválidos. Favor vuelva a intentar', $element = 'default', $params = array(), $key = 'auth');
+            }
         }
     }
 
