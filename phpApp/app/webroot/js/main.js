@@ -150,18 +150,7 @@ $(document).ready(function() {
             $('#local').attachStream(stream);
         }
 
-        if (initiator) {
-            createOffer();
-        } else {
-            ws.onmessage = function (event) {
-                var signal = JSON.parse(event.data);
-                if (signal.sdp) {
-                        receiveOffer(signal);
-                }
-            };
-            console.log("waiting for camera...");
-        }
-        
+        createOffer();
     }
 
 
