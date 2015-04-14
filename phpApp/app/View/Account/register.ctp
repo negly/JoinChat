@@ -39,7 +39,7 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#UserLoginGuestForm").validate({
+        $("#UserRegisterForm").validate({
             rules: {
                 "data[User][username]": {
                     required: true,
@@ -52,6 +52,12 @@
                 "data[User][email]": {
                     required: true,
                     email: true
+                },
+                "data[User][password]": {
+                    required: true
+                },
+                "data[User][passwordConfirm]": {
+                    equalTo: "#UserPassword"
                 }
             },
             submitHandler: function(form) {

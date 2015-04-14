@@ -33,8 +33,6 @@ App::uses('AppController', 'Controller');
 
 class AccountController extends AppController {
 
-    const URL_CHECK_USER = "http://uakka468c67a.azul24.koding.io:8080/WebApplication3/LoginServlet?format=json";
-
     /*********************************************************************
      *              CONTROLLER DATA MEMBERS
      *********************************************************************/
@@ -78,11 +76,11 @@ class AccountController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            $ipaddress = gethostbyname(self::URL_CHECK_USER);
-            if ($ipaddress === self::URL_CHECK_USER) {
+            $loginUrl = Configure::read('Database.loginUrl');
+
+            if (!$this->_checkDatabase($loginUrl, 'POST')) {
                 $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible');
-            }
-            else {
+            } else {
                 if ($this->Auth->login()) {
                     return $this->redirect($this->Auth->redirectUrl());
                 }
@@ -100,7 +98,33 @@ class AccountController extends AppController {
     }
 
     public function register() {
+        if ($this->request->is('post')) {
+            $registerUrl = Configure::read('Database.registerUrl');
+
+            if (!$this->_checkDatabase($registerUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para registrar nuevos usuarios no se encuentra disponible');
+            } else {
+                $user = $this->request->data['User'];
+                $user['userpass'] = $user['password'];
+                $user['nickname'] = $user['alias'];
+
+                App::uses('HttpSocket', 'Network/Http');
         
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($registerUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        $this->Auth->login($this->request->data['User']);
+                        return $this->redirect($this->Auth->redirectUrl());
+                    } else {
+                        $this->Session->setFlash($jsonResponse['message']);
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para registrar nuevos usuarios');
+                }                
+            }
+        }
     }
 
     public function rememberPassword() {

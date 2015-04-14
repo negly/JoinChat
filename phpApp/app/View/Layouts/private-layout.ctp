@@ -58,33 +58,53 @@ THE SOFTWARE. -->
                     
                     $links[$activeOption]['class'] = 'active';
 
-                    $links['index']['html'] = $this->Html->link(
-                        $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-home btn btn-primary')) . $this->Html->tag('span', 'Inicio'),
-                        '/index',
-                        array('escape' => false, 'class' => $links['index']['class'])
-                    );
-                    $links['newchat']['html'] = $this->Html->link(
-                        $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-plus btn btn-primary')) . $this->Html->tag('span', 'Nueva conversación'),
-                        '#',
-                        array('escape' => false, 'class' => $links['newchat']['class'], 'data-toggle' => 'modal', 'data-target' => '#new-chat-modal')
-                    );
-                    $links['chats']['html'] = $this->Html->link(
-                        $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-comment btn btn-primary')) . $this->Html->tag('span', 'Mis conversaciones'),
-                        '/index/chats',
-                        array('escape' => false, 'class' => $links['chats']['class'])
-                    );
-                    $links['settings']['html'] = $this->Html->link(
-                        $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-wrench btn btn-primary')) . $this->Html->tag('span', 'Configuración'),
-                        '/account/settings',
-                        array('escape' => false, 'class' => $links['settings']['class'])
-                    );
-
+                    $guest = false;
                     if (AuthComponent::user('guest') && AuthComponent::user('guest') === true) {
+                        $guest = true;
                         $links['register']['html'] = '<li>' . $this->Html->link(
                             $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-log-in btn btn-primary')) . $this->Html->tag('span', 'Registrarme'),
                             '/account/register',
                             array('escape' => false, 'class' => $links['register']['class'])
                         ) . '</li>';
+                    }
+
+                    if ($guest) {
+                        $links['newchat']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-plus btn btn-primary')) . $this->Html->tag('span', 'Nueva conversación'),
+                            '#',
+                            array('escape' => false, 'class' => $links['newchat']['class'], 'data-toggle' => 'modal', 'data-target' => '#guest-modal')
+                        );
+                        $links['chats']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-comment btn btn-primary')) . $this->Html->tag('span', 'Mis conversaciones'),
+                            '#',
+                            array('escape' => false, 'class' => $links['chats']['class'], 'data-toggle' => 'modal', 'data-target' => '#guest-modal')
+                        );
+                        $links['settings']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-wrench btn btn-primary')) . $this->Html->tag('span', 'Configuración'),
+                            '#',
+                            array('escape' => false, 'class' => $links['settings']['class'], 'data-toggle' => 'modal', 'data-target' => '#guest-modal')
+                        );
+                    } else {
+                        $links['index']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-home btn btn-primary')) . $this->Html->tag('span', 'Inicio'),
+                            '/index',
+                            array('escape' => false, 'class' => $links['index']['class'])
+                        );
+                        $links['newchat']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-plus btn btn-primary')) . $this->Html->tag('span', 'Nueva conversación'),
+                            '#',
+                            array('escape' => false, 'class' => $links['newchat']['class'], 'data-toggle' => 'modal', 'data-target' => '#new-chat-modal')
+                        );
+                        $links['chats']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-comment btn btn-primary')) . $this->Html->tag('span', 'Mis conversaciones'),
+                            '/index/chats',
+                            array('escape' => false, 'class' => $links['chats']['class'])
+                        );
+                        $links['settings']['html'] = $this->Html->link(
+                            $this->Html->tag('span', '', array('class' => 'icon glyphicon glyphicon-wrench btn btn-primary')) . $this->Html->tag('span', 'Configuración'),
+                            '/account/settings',
+                            array('escape' => false, 'class' => $links['settings']['class'])
+                        );
                     }
 
                     echo <<<NAV
@@ -202,6 +222,23 @@ NAV;
                             </li>
                         </ul>
                         <button type="button" class="btn btn-primary">Empezar chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="guest-modal" tabindex="-1" role="dialog" aria-labelledby="guest-modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">¡Aún eres un invitado!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Para poder acceder a este link debes registrarte primero. Te invitamos a que te registres en este <?php echo $this->Html->link(
+                            'link',
+                            '/account/register',
+                            array('class' => $links['register']['class'])
+                        ) ?></p>
                     </div>
                 </div>
             </div>
