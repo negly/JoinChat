@@ -35,8 +35,7 @@ class IsabelAuthenticate extends BaseAuthenticate {
 
     public function authenticate(CakeRequest $request, CakeResponse $response) {
         $loginUrl = Configure::read('Database.loginUrl');
-        // Return an array of user if they could authenticate the user,
-        // return false if not
+
         App::uses('HttpSocket', 'Network/Http');
         
         $httpSocket = new HttpSocket();

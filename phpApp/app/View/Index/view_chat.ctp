@@ -29,8 +29,8 @@
  * THE SOFTWARE.
  */
  
-    $userAlias = 'Joi';
-    $title = 'Chat con ' . $userAlias;
+    $userNickname = 'Joi';
+    $title = 'Chat con ' . $userNickname;
     $this->assign('title', $title);
 ?>
 <?php $this->start('script'); ?>
@@ -82,7 +82,7 @@
         <div class="col-xs-12">
             <div id="chat" class="panel panel-primary" style="position: relative;">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><?php echo $userAlias; ?><span class="label label-info pull-right">Último mensaje 2015/01/28 01:05pm</span></h3>
+                    <h3 class="panel-title"><?php echo $userNickname; ?><span class="label label-info pull-right">Último mensaje 2015/01/28 01:05pm</span></h3>
                 </div>
                 <div class="panel-body" style="overflow-y: auto;">
                     <div id="videochat" class="row">
@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-md-6 text-center">
                             <video id="remote" autoplay controls>
-                                Cámara de <?php echo $userAlias; ?>
+                                Cámara de <?php echo $userNickname; ?>
                             </video>
                         </div>
                         <div id="video-id" class="col-xs-12 text-center"></div>
