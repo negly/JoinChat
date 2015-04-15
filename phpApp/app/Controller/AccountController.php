@@ -30,6 +30,7 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('HttpSocket', 'Network/Http');
 
 class AccountController extends AppController {
 
@@ -79,7 +80,7 @@ class AccountController extends AppController {
             $loginUrl = Configure::read('Database.loginUrl');
 
             if (!$this->_checkDatabase($loginUrl, 'POST')) {
-                $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible');
+                $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
             } else {
                 if ($this->Auth->login()) {
                     return $this->redirect($this->Auth->redirectUrl());
@@ -102,13 +103,10 @@ class AccountController extends AppController {
             $registerUrl = Configure::read('Database.registerUrl');
 
             if (!$this->_checkDatabase($registerUrl, 'POST')) {
-                $this->Session->setFlash('Lo sentimos!!! El servicio para registrar nuevos usuarios no se encuentra disponible');
+                $this->Session->setFlash('Lo sentimos!!! El servicio para registrar nuevos usuarios no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
             } else {
                 $user = $this->request->data['User'];
                 $user['userpass'] = $user['password'];
-                $user['nickname'] = $user['alias'];
-
-                App::uses('HttpSocket', 'Network/Http');
         
                 $httpSocket = new HttpSocket();
                 $httpResponse = $httpSocket->post($registerUrl, $user);
@@ -118,10 +116,10 @@ class AccountController extends AppController {
                         $this->Auth->login($this->request->data['User']);
                         return $this->redirect($this->Auth->redirectUrl());
                     } else {
-                        $this->Session->setFlash($jsonResponse['message']);
+                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
                     }
                 } else {
-                    $this->Session->setFlash('Hay un problema en el servicio para registrar nuevos usuarios');
+                    $this->Session->setFlash('Hay un problema en el servicio para registrar nuevos usuarios', $element = 'default', $params = array(), $key = 'warning');
                 }                
             }
         }
@@ -136,11 +134,67 @@ class AccountController extends AppController {
     }
 
     public function edit() {
+        if ($this->request->is('post')) {
+            $editUrl = Configure::read('Database.editUrl');
+
+            if (!$this->_checkDatabase($editUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para editar el perfil no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
+                $user = $this->request->data['User'];
+                $user['username'] = $this->Auth->user('usuario');
         
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($editUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        $newUser = array_merge($this->Auth->user(), $user);
+                        $this->Session->write('Auth.User', $newUser);
+                        $this->Session->setFlash($jsonResponse['message']);
+                        return $this->redirect(array('action' => 'settings'));
+                    } else {
+                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para editar el perfil', $element = 'default', $params = array(), $key = 'warning');
+                }                
+            }
+        }
+
+        if (!$this->request->data) {
+            $this->request->data['User'] = $this->Auth->user();
+        }
     }
 
     public function changePassword() {
+        if ($this->request->is('post')) {
+            $changePasswordUrl = Configure::read('Database.changePasswordUrl');
 
+            if (!$this->_checkDatabase($changePasswordUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para cambiar la clave no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
+                $user = $this->request->data['User'];
+                $user['username'] = $this->Auth->user('usuario');
+                $user['userpass'] = $user['password'];
+        
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($changePasswordUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        $newUser = $this->Auth->user();
+                        $newUser['password'] = $user['userpass'];
+                        $this->Session->write('Auth.User', $newUser);
+                        $this->Session->setFlash($jsonResponse['message']);
+                        return $this->redirect(array('action' => 'settings'));
+                    } else {
+                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para cambiar la clave', $element = 'default', $params = array(), $key = 'warning');
+                }                
+            }
+        }
     }
 
 }

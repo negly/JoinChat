@@ -145,12 +145,22 @@ NAV;
                 <?php 
                     $flashMsg = $this->Session->flash();
                     $authMsg = $this->Session->flash('auth');
+                    $warnMsg = $this->Session->flash('warning');
 
                     if ($flashMsg) :
                 ?>
                 <div class="alert alert-dismissible alert-info">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <?php echo $flashMsg; ?>
+                </div>
+                <?php 
+                    endif;
+
+                    if ($warnMsg) :
+                ?>
+                <div class="alert alert-dismissible alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <?php echo $warnMsg; ?>
                 </div>
                 <?php 
                     endif;
@@ -179,7 +189,7 @@ NAV;
                     <div class="modal-body">
                         <?php
                             // echo $this->Form->create($model = 'Contact', $options = array('type' => 'get', 'url' => array('controller' => 'contacts', 'action' => 'search')));
-                            echo $this->Form->input('aliasEmail', array(
+                            echo $this->Form->input('nicknameEmail', array(
                                     'type' => 'text',
                                     'label' => 'Alias / Correo',
                                     'class' => 'form-control',
@@ -259,55 +269,57 @@ NAV;
                 });
             });
 
-            var guest, db;
+            <?php if (AuthComponent::user('guest') && AuthComponent::user('guest') == true) : ?>
+                var guest, db;
 
-            $(document).ready(function() {
-                var schema = {
-                  autoSchema: false,
-                  stores: [{
-                    name: 'guest',
-                    autoIncrement: false,
-                    indexes: [
-                        {
-                            name: 'alias'
-                        },
-                        {
-                            name: 'email'
-                        }
-                    ]
-                  }]
-                };
-                db = new ydn.db.Storage('joinchat', schema);
-
-                function init() {
-                    db.get('guest', 1)
-                        .done(function(record) {
-                            if (record) {
-                                guest = record;
-                                guestFound = guestFound || function() {};
-                                if (guestFound) {
-                                    guestFound();
-                                }
+                $(document).ready(function() {
+                    var schema = {
+                      autoSchema: false,
+                      stores: [{
+                        name: 'guest',
+                        autoIncrement: false,
+                        indexes: [
+                            {
+                                name: 'nickname'
+                            },
+                            {
+                                name: 'email'
                             }
-                        })
-                        .fail(function(e) {
-                            console.log(e.message);
-                        });
-                }
+                        ]
+                      }]
+                    };
+                    db = new ydn.db.Storage('joinchat', schema);
 
-                function guestFound() {
-                    if ($userAlias = $("#UserAlias")) {
-                        $userAlias.val(guest.alias);
+                    function init() {
+                        db.get('guest', 1)
+                            .done(function(record) {
+                                if (record) {
+                                    guest = record;
+                                    guestFound = guestFound || function() {};
+                                    if (guestFound) {
+                                        guestFound();
+                                    }
+                                }
+                            })
+                            .fail(function(e) {
+                                console.log(e.message);
+                            });
                     }
-                    if ($userEmail = $("#UserEmail")) {
-                        $userEmail.val(guest.email);
-                    }
-                }
 
-                db.onReady(function() {
-                  init();
+                    function guestFound() {
+                        if ($userNickname = $("#UserNickname")) {
+                            $userNickname.val(guest.nickname);
+                        }
+                        if ($userEmail = $("#UserEmail")) {
+                            $userEmail.val(guest.email);
+                        }
+                    }
+
+                    db.onReady(function() {
+                      init();
+                    });
                 });
-            });
+            <?php endif; ?>
         </script>
         <?php echo $this->fetch('script'); ?>
     </body>
