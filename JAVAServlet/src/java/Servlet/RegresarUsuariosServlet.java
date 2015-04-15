@@ -1,4 +1,5 @@
 package Servlet;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -9,11 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Archivos.Login;
+import Archivos.RegresarUsuarios;
 import Archivos.Usuario1;
+import java.util.ArrayList;
 import org.json.simple.*;
 
-public class LoginServlet extends HttpServlet {
+public class RegresarUsuariosServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,32 +25,35 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        String n = request.getParameter("username");
-        String p = request.getParameter("userpass");
-
-        Usuario1 u = Login.validate(n, p);
+        String e = request.getParameter("username");
+        
+        ArrayList<Usuario1> u = RegresarUsuarios.validate(e);
         if (u!=null) {
             String format = request.getParameter("format");
             
             if (format.equals("json")) {
                 JSONObject json = new JSONObject();
                 json.put("success", true);
-                JSONObject user = new JSONObject();
-                user.put("idUsuario", u.getidUsuario());
-                user.put("usuario", u.getUsuario());
-                user.put("password", u.getPassword());
-                user.put("nickname",u.getNickname());
-                user.put("email", u.getEmail());
-                user.put("status",u.getStatus());
-                json.put("user", user);                
-                out.print(json);
+                
+                    JSONObject user = new JSONObject();
+                for (int i = 0; i < u.size(); i++) {
+                    user.put("idUsuario", u.get(i).getidUsuario());
+                    user.put("usuario", u.get(i).getidUsuario());
+                    user.put("password", u.get(i).getPassword());
+                    user.put("nickname",u.get(i).getNickname());
+                    user.put("email", u.get(i).getEmail());
+                    user.put("status",u.get(i).getStatus());
+                    json.put("user", user);
+                    out.print(user);
+                }             
+                    
             }
         } else {
             String format = request.getParameter("format");
             if (format.equals("json")) {
                 JSONObject json = new JSONObject();
                 json.put("success", false);
-                json.put("message","Usuario no registrado");
+                json.put("message","ERROR");
                 out.print(json);
                
                 

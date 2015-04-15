@@ -31,7 +31,7 @@
                     <td><a href="ActualizarStatus.jsp">ACTUALIZAR STATUS</a></td>    
                 </tr>
                 <tr>  
-                    <td><a href="UsuariosExistentes.jsp">USUARIOS EXISTENTES</a></td>    
+                    <td><a href="RegresarUsuarios.jsp">REGRESAR USUARIOS</a></td>    
                 </tr>
             </table>  
         </fieldset>  

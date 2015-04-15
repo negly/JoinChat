@@ -57,12 +57,12 @@
         <url-pattern>/StatusServlet</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>UsuariosExistentesServlet</servlet-name>
-        <servlet-class>Servlet.UsuariosExistentesServlet</servlet-class>
+        <servlet-name>RegresarUsuariosServlet</servlet-name>
+        <servlet-class>Servlet.RegresarUsuariosServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UsuariosExistentesServlet</servlet-name>
-        <url-pattern>/UsuariosExistentesServlet</url-pattern>
+        <servlet-name>RegresarUsuariosServlet</servlet-name>
+        <url-pattern>/RegresarUsuariosServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

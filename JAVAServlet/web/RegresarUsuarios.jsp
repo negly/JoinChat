@@ -3,13 +3,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>  
+<title>Buscar</title>  
 </head>  
 <body>  
-    <form action="UsuariosExistentesServlet" method="post">  
+    <form action="RegresarUsuariosServlet" method="post">  
         <fieldset style="width: 300px">  
-            <legend> Usuarios Existentes </legend>  
+            <legend>REGRESAR USUARIOS: </legend>  
             <table>  
+                <tr>  
+                    <td>Usuario:</td>  
+                    <td><input type="text" name="username" required="required" /></td>  
+                </tr> 
                 <input type="hidden" value="json" name="format" />
                 <tr>  
                     <td><input type="submit" value="Resultado" /></td>  
