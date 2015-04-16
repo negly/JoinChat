@@ -120,7 +120,10 @@ Configure::load('JoinChatConfig', 'ini');
 
 if(!defined('APPLICATION_ENV')) {
     $fullBaseUrl = Router::url('/', true);
-    if (FALSE !== stripos($fullBaseUrl, 'kladfelipe')) {
+    /**
+     * Se pone la segunda condición debido al balanceador presente en el koding de Felipe Calad
+     */ 
+    if (FALSE !== stripos($fullBaseUrl, 'kladfelipe') || FALSE !== stripos($fullBaseUrl, '127.0.0.1:81')) {
         define('APPLICATION_ENV', 'production_calad');
     } else if (FALSE !== stripos($fullBaseUrl, 'negly')) {
         define('APPLICATION_ENV', 'production_joinner');
