@@ -119,13 +119,14 @@ Configure::config('ini', new IniReader());
 Configure::load('JoinChatConfig', 'ini');
 
 if(!defined('APPLICATION_ENV')) {
-    if (FALSE !== stripos($_SERVER['SERVER_NAME'], 'kladfelipe')) {
+    $fullBaseUrl = Router::url('/', true);
+    if (FALSE !== stripos($fullBaseUrl, 'kladfelipe')) {
         define('APPLICATION_ENV', 'production_calad');
-    } else if (FALSE !== stripos($_SERVER['SERVER_NAME'], 'negly')) {
+    } else if (FALSE !== stripos($fullBaseUrl, 'negly')) {
         define('APPLICATION_ENV', 'production_joinner');
-    } else if (FALSE !== stripos($_SERVER['SERVER_NAME'], 'juancho')) {
+    } else if (FALSE !== stripos($fullBaseUrl, 'juancho')) {
         define('APPLICATION_ENV', 'production_juancho');
-    } else if (FALSE !== stripos($_SERVER['SERVER_NAME'], 'azul')) {
+    } else if (FALSE !== stripos($fullBaseUrl, 'azul')) {
         define('APPLICATION_ENV', 'production_isabel');
     } else {
         define('APPLICATION_ENV', 'development');
