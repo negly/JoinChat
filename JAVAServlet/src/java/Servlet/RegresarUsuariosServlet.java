@@ -30,25 +30,24 @@ public class RegresarUsuariosServlet extends HttpServlet {
         ArrayList<Usuario1> u = RegresarUsuarios.validate(e);
         if (u!=null) {
             String format = request.getParameter("format");
+            
             if (format.equals("json")) {
-   JSONObject json = new JSONObject();
-   json.put("success", true);
-   
-   JSONArray users = new JSONArray();
-   for (int i = 0; i < u.size(); i++) {
-   	JSONObject user = new JSONObject();
-       user.put("idUsuario", u.get(i).getidUsuario());
-       user.put("usuario", u.get(i).getidUsuario());
-       user.put("password", u.get(i).getPassword());
-       user.put("nickname",u.get(i).getNickname());
-       user.put("email", u.get(i).getEmail());
-       user.put("status",u.get(i).getStatus());
-       users.add(user);
-   }
-
-   json.put("users", users);
-   out.print(json);
-}
+                JSONObject json = new JSONObject();
+                json.put("success", true);
+                
+                    JSONObject user = new JSONObject();
+                for (int i = 0; i < u.size(); i++) {
+                    user.put("idUsuario", u.get(i).getidUsuario());
+                    user.put("usuario", u.get(i).getidUsuario());
+                    user.put("password", u.get(i).getPassword());
+                    user.put("nickname",u.get(i).getNickname());
+                    user.put("email", u.get(i).getEmail());
+                    user.put("status",u.get(i).getStatus());
+                    json.put("user", user);
+                    out.print(user);
+                }             
+                    
+            }
         } else {
             String format = request.getParameter("format");
             if (format.equals("json")) {
