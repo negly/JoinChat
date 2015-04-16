@@ -38,7 +38,7 @@ public class RegresarUsuariosServlet extends HttpServlet {
    for (int i = 0; i < u.size(); i++) {
    	JSONObject user = new JSONObject();
        user.put("idUsuario", u.get(i).getidUsuario());
-       user.put("usuario", u.get(i).getidUsuario());
+       user.put("usuario", u.get(i).getUsuario());
        user.put("password", u.get(i).getPassword());
        user.put("nickname",u.get(i).getNickname());
        user.put("email", u.get(i).getEmail());
