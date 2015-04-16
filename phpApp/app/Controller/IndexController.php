@@ -73,11 +73,6 @@ class IndexController extends AppController {
         
     }
 
-    public function logout() {
-        $this->Session->setFlash('Has finalizado tu sesión con éxito!');
-        return $this->redirect($this->Auth->logout());
-    }
-
     public function viewChat() {
 
     }

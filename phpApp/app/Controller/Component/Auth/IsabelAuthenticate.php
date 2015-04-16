@@ -34,7 +34,7 @@ App::uses('BaseAuthenticate', 'Controller/Component/Auth');
 class IsabelAuthenticate extends BaseAuthenticate {
 
     public function authenticate(CakeRequest $request, CakeResponse $response) {
-        $loginUrl = Configure::read('Database.loginUrl');
+        $loginUrl = Configure::read(APPLICATION_ENV . '.loginUrl');
 
         App::uses('HttpSocket', 'Network/Http');
         

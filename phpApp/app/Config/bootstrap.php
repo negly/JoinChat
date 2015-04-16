@@ -117,3 +117,17 @@ CakeLog::config('error', array(
 App::uses('IniReader', 'Configure');
 Configure::config('ini', new IniReader());
 Configure::load('JoinChatConfig', 'ini');
+
+if(!defined('APPLICATION_ENV')) {
+    if(TRUE === stripos($_SERVER['SERVER_NAME'], 'kladfelipe')) {
+        define('APPLICATION_ENV', 'production_calad');
+    } else if (TRUE === stripos($_SERVER['SERVER_NAME'], 'negly')) {
+        define('APPLICATION_ENV', 'production_joinner');
+    } else if (TRUE === stripos($_SERVER['SERVER_NAME'], 'juancho')) {
+        define('APPLICATION_ENV', 'production_juancho');
+    } else if (TRUE === stripos($_SERVER['SERVER_NAME'], 'azul')) {
+        define('APPLICATION_ENV', 'production_isabel');
+    } else {
+        define('APPLICATION_ENV', 'development');
+    }
+}
