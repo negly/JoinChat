@@ -35,6 +35,8 @@
 ?>
 <?php $this->start('script'); ?>
 <script type="text/javascript">
+    window.kodingUrl = '<?php echo Configure::read(APPLICATION_ENV . ".kodingUrl"); ?>';
+
     $(document).ready(function() {
         sizeContent();
         $chatBody = $('#chat .panel-body');
