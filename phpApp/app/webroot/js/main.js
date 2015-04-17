@@ -28,8 +28,6 @@
     THE SOFTWARE.
 */
 
-// var chatId = false;
-var chatId = '12345';
 var localStream, remoteStream, pc, ws, channel;
 $(document).ready(function() {
     ws = new WebSocket('ws://' + kodingUrl + ':7000/ws/' + chatId);
@@ -286,8 +284,6 @@ $(document).ready(function() {
             msg: $("#msg").val()
         };
         channel.send(JSON.stringify(objToSend));
-        console.log(JSON.stringify(objToSend));
-        console.log(JSON.stringify(objToSend).msg);
         createMsg(true, $("#msg").val());
         $("#msg").val("");
     }

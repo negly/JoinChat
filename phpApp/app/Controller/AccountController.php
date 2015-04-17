@@ -116,11 +116,9 @@ class AccountController extends AppController {
                 $httpResponse = $httpSocket->post($registerUrl, $user);
                 if ($httpResponse && $httpResponse->isOk()) {
                     $jsonResponse = json_decode($httpResponse->body(), true);
+                    $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
                     if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
-                        $this->Auth->login($this->request->data['User']);
-                        return $this->redirect($this->Auth->redirectUrl());
-                    } else {
-                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                        return $this->redirect(array('action' => 'login'));
                     }
                 } else {
                     $this->Session->setFlash('Hay un problema en el servicio para registrar nuevos usuarios', $element = 'default', $params = array(), $key = 'warning');
