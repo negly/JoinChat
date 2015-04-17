@@ -30,13 +30,12 @@
  */
 
 App::uses('BaseAuthenticate', 'Controller/Component/Auth');
+App::uses('HttpSocket', 'Network/Http');
 
 class IsabelAuthenticate extends BaseAuthenticate {
 
     public function authenticate(CakeRequest $request, CakeResponse $response) {
         $loginUrl = Configure::read(APPLICATION_ENV . '.loginUrl');
-
-        App::uses('HttpSocket', 'Network/Http');
         
         $httpSocket = new HttpSocket();
         $httpResponse = $httpSocket->post($loginUrl, $request->data['User']);

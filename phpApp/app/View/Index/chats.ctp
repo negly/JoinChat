@@ -61,10 +61,18 @@
         </div>
     </div>
     <div class="row">
+        <?php
+            if (isset($users)) :
+                if (empty($users)) {
+                    echo '<h4>No hay chats disponibles</h4>';
+                }
+
+                foreach ($users as $user) :
+        ?>
         <div class="col-md-3">
-            <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat')); ?>">
+            <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat', $user['idUsuario'], $user['nickname'])); ?>">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Joinner Ovalle</h3>
+                    <h3 class="panel-title"><?php echo $user['nickname']; ?></h3>
                 </div>
                 <div class="panel-body">
                     <div class="empty-msgs">
@@ -76,6 +84,10 @@
                 </div>
             </div>
         </div>
+        <?php
+                endforeach;
+            endif;
+        ?>
         <!-- <div class="col-md-3">
             <div class="panel panel-primary chat-preview" href="<?php echo $this->Html->url(array('controller' => 'index', 'action' => 'viewChat')); ?>">
                 <div class="panel-heading">
