@@ -51,12 +51,22 @@ THE SOFTWARE. -->
                     <?php 
                         $flashMsg = $this->Session->flash();
                         $authMsg = $this->Session->flash('auth');
+                        $warnMsg = $this->Session->flash('warning');
 
                         if ($flashMsg) :
                     ?>
                     <div class="alert alert-dismissible alert-info">
                         <button type="button" class="close" data-dismiss="alert">×</button>
                         <?php echo $flashMsg; ?>
+                    </div>
+                    <?php 
+                        endif;
+
+                        if ($warnMsg) :
+                    ?>
+                    <div class="alert alert-dismissible alert-warning">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <?php echo $warnMsg; ?>
                     </div>
                     <?php 
                         endif;
@@ -90,7 +100,7 @@ THE SOFTWARE. -->
                     autoIncrement: false,
                     indexes: [
                         {
-                            name: 'alias'
+                            name: 'nickname'
                         },
                         {
                             name: 'email'
@@ -117,8 +127,8 @@ THE SOFTWARE. -->
                 }
 
                 function guestFound() {
-                    if ($userAlias = $("#UserAlias")) {
-                        $userAlias.val(guest.alias);
+                    if ($userNickname = $("#UserNickname")) {
+                        $userNickname.val(guest.nickname);
                     }
                     if ($userEmail = $("#UserEmail")) {
                         $userEmail.val(guest.email);

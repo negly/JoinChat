@@ -30,10 +30,9 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('HttpSocket', 'Network/Http');
 
 class AccountController extends AppController {
-
-    const URL_CHECK_USER = "http://uakka468c67a.azul24.koding.io:8080/WebApplication3/LoginServlet?format=json";
 
     /*********************************************************************
      *              CONTROLLER DATA MEMBERS
@@ -75,14 +74,13 @@ class AccountController extends AppController {
         return $this->redirect(array('action' => 'login'));
     }
 
-
     public function login() {
         if ($this->request->is('post')) {
-            $ipaddress = gethostbyname(self::URL_CHECK_USER);
-            if ($ipaddress === self::URL_CHECK_USER) {
-                $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible');
-            }
-            else {
+            $loginUrl = Configure::read(APPLICATION_ENV . '.loginUrl');
+
+            if (!$this->_checkDatabase($loginUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para validar los usuarios no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
                 if ($this->Auth->login()) {
                     return $this->redirect($this->Auth->redirectUrl());
                 }
@@ -99,8 +97,34 @@ class AccountController extends AppController {
         }
     }
 
+    public function logout() {
+        $this->Session->setFlash('Has finalizado tu sesión con éxito!');
+        return $this->redirect($this->Auth->logout());
+    }
+
     public function register() {
+        if ($this->request->is('post')) {
+            $registerUrl = Configure::read(APPLICATION_ENV . '.registerUrl');
+
+            if (!$this->_checkDatabase($registerUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para registrar nuevos usuarios no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
+                $user = $this->request->data['User'];
+                $user['userpass'] = $user['password'];
         
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($registerUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        return $this->redirect(array('action' => 'login'));
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para registrar nuevos usuarios', $element = 'default', $params = array(), $key = 'warning');
+                }                
+            }
+        }
     }
 
     public function rememberPassword() {
@@ -112,11 +136,67 @@ class AccountController extends AppController {
     }
 
     public function edit() {
+        if ($this->request->is('post')) {
+            $editUrl = Configure::read(APPLICATION_ENV . '.editUrl');
+
+            if (!$this->_checkDatabase($editUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para editar el perfil no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
+                $user = $this->request->data['User'];
+                $user['username'] = $this->Auth->user('usuario');
         
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($editUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        $newUser = array_merge($this->Auth->user(), $user);
+                        $this->Session->write('Auth.User', $newUser);
+                        $this->Session->setFlash($jsonResponse['message']);
+                        return $this->redirect(array('action' => 'settings'));
+                    } else {
+                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para editar el perfil', $element = 'default', $params = array(), $key = 'warning');
+                }                
+            }
+        }
+
+        if (!$this->request->data) {
+            $this->request->data['User'] = $this->Auth->user();
+        }
     }
 
     public function changePassword() {
+        if ($this->request->is('post')) {
+            $changePasswordUrl = Configure::read(APPLICATION_ENV . '.changePasswordUrl');
 
+            if (!$this->_checkDatabase($changePasswordUrl, 'POST')) {
+                $this->Session->setFlash('Lo sentimos!!! El servicio para cambiar la clave no se encuentra disponible', $element = 'default', $params = array(), $key = 'warning');
+            } else {
+                $user = $this->request->data['User'];
+                $user['username'] = $this->Auth->user('usuario');
+                $user['userpass'] = $user['password'];
+        
+                $httpSocket = new HttpSocket();
+                $httpResponse = $httpSocket->post($changePasswordUrl, $user);
+                if ($httpResponse && $httpResponse->isOk()) {
+                    $jsonResponse = json_decode($httpResponse->body(), true);
+                    if (isset($jsonResponse['success']) && $jsonResponse['success'] == true) {
+                        $newUser = $this->Auth->user();
+                        $newUser['password'] = $user['userpass'];
+                        $this->Session->write('Auth.User', $newUser);
+                        $this->Session->setFlash($jsonResponse['message']);
+                        return $this->redirect(array('action' => 'settings'));
+                    } else {
+                        $this->Session->setFlash($jsonResponse['message'], $element = 'default', $params = array(), $key = 'warning');
+                    }
+                } else {
+                    $this->Session->setFlash('Hay un problema en el servicio para cambiar la clave', $element = 'default', $params = array(), $key = 'warning');
+                }                
+            }
+        }
     }
 
 }
