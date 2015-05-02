@@ -204,7 +204,7 @@ $(document).ready(function() {
 
         var channelOnOpen = function () {
             console.log("Channel " + channel.label + " is open");
-            enableChatFields();
+            enableChatFields(true);
         };
 
         var channelOnClose = function (evt) {
