@@ -107,7 +107,6 @@
 .sidebar-nav li span.icon {
     text-indent: 0;
     margin-right: 10px;
-    font-weight: normal;
 }
 
 .sidebar-nav li a:hover {
@@ -243,6 +242,10 @@ div.form-group label.error {
     }
 }
 
+.glyphicon {
+    font-weight: normal;
+}
+
 .empty-msgs {
     text-align: center;
     margin: 4px 8px;
@@ -268,6 +271,7 @@ div.form-group label.error {
 .bubble.bubble-right {
     background-color: inherit;
     border-width: 2px;
+    text-align: right;
 }
 
 .bubble .pointer {
@@ -291,6 +295,28 @@ div.form-group label.error {
 .bubble-left .pointer {
     border-width: 9px 9px 9px 0;
     left: -9px;
+}
+
+span.time {
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+}
+
+.bubble:hover span.time {
+    display: inline;
+}
+
+.bubble-left span.time {
+    color: white;
+    float: right;
+    margin-left: 10px;
+}
+
+.bubble-right span.time {
+    color: black;
+    float: left;
+    margin-right: 10px;
 }
 
 /**
