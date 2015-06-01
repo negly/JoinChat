@@ -212,10 +212,8 @@ $(document).ready(function() {
         };
 
         if (initiator) {
-            console.info('Soy iniciador');
             var channelOptions = { reliable: false };
             if (typeof(channel) == "undefined" || channel == null) {
-                console.info('Creando channel');
                 channel = pc.createDataChannel("chat" + chatId, channelOptions);  
             };
             channel.onmessage = channelOnMessage;
@@ -251,7 +249,6 @@ $(document).ready(function() {
                 }
             }
             else{
-                console.log(initiator);
                 if (initiator) {
                     $("#video-btn").prop( "disabled", false );
                     var arrayToStoreChunks = [];
