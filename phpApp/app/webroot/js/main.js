@@ -254,6 +254,92 @@ $(document).ready(function() {
                 console.log(initiator);
                 if (initiator) {
                     $("#video-btn").prop( "disabled", false );
+                    var arrayToStoreChunks = [];
+                    var filename;
+                    var receiving = false;
+                    var channelOnMessage = function (evt) {
+                        var objReceived = JSON.parse(evt.data);
+                        if (objReceived.command) {
+                            var commandParts = objReceived.command.split('.');
+                            var args = [];
+                            if (objReceived.args) {
+                                args = objReceived.args;
+                            }
+                            window[commandParts[0]][commandParts[1]](args);
+                        }
+
+                        if (objReceived.msg || objReceived.file) {
+                            var historyObj = historyObj = {
+                                'chatId': chatId,
+                                'timestamp': new Date().getTime(),
+                                'received': 1
+                            };
+                        
+                            if (objReceived.msg) {
+                                var msg = objReceived.msg;
+                                console.info(evt);
+
+                                historyObj.message = msg;
+                                historyObj.type = 'message';
+                                if (db) {
+                                    db.put('history', historyObj);
+                                }
+                                
+                                createMsg(false, msg);
+                            }
+                            if (objReceived.file) {
+                                if (!receiving) {
+                                    var fileBtn = $("#file-btn");
+                                    fileBtn.prop('disabled', true);
+                                    fileBtn.html('<span style="margin-left: 5px">Recibiendo...</span>');
+                                    receiving = true;
+                                }
+                                if (objReceived.file.name) {
+                                    filename = objReceived.file.name;
+                                }
+                                arrayToStoreChunks.push(objReceived.file.content);
+                                if (objReceived.file.last) {
+                                    var fileContent = arrayToStoreChunks.join('');
+
+                                    historyObj.message = fileContent;
+                                    historyObj.type = 'file';
+                                    historyObj.filename = filename;
+                                    if (db) {
+                                        db.put('history', historyObj);
+                                    }
+
+                                    createFileMsg(false, fileContent, filename);
+
+                                    filename = '';
+                                    arrayToStoreChunks = [];
+                                    receiving = false;
+
+                                    var fileBtn = $("#file-btn");
+                                    fileBtn.prop('disabled', false);
+                                    fileBtn.html('');
+                                }
+                            }
+                        }
+                    };
+
+                    var channelOnOpen = function () {
+                        console.log("Channel " + channel.label + " is open");
+                        enableChatFields(true);
+                    };
+
+                    var channelOnClose = function (evt) {
+                        console.log('RTCDataChannel closed.');
+                    };
+
+                    console.info('Soy iniciador');
+                    var channelOptions = { reliable: false };
+                    if (typeof(channel) == "undefined" || channel == null) {
+                        console.info('Creando channel');
+                        channel = pc.createDataChannel("chat" + chatId, channelOptions);  
+                    };
+                    channel.onmessage = channelOnMessage;
+                    channel.onopen = channelOnOpen;
+                    channel.onclose = channelOnClose;
                 };
                 var signal = JSON.parse(event.data);
                 if (signal.sdp) {
